@@ -1,0 +1,51 @@
+// ============================================================
+// Cairo Women-Only Transit — DAX measures
+// The model already contains these (applied via powerbi/model_additions.tmdl in TMDL view).
+// Kept here as readable reference.
+// Create a blank table named "_Measures" (Home > Enter data > OK),
+// then add each measure below to it (Modeling > New measure).
+// Table names assume you renamed the imported tables without the schema prefix
+// ("app rides" -> rides, "rpt route_priority" -> route_priority ...) — guide step 3.
+// ============================================================
+
+Total Rides = COUNTROWS ( rides )
+
+Total Reports = COUNTROWS ( safety_reports )
+
+Reports per 1K Rides =
+DIVIDE ( [Total Reports], [Total Rides] ) * 1000
+
+Riders = DISTINCTCOUNT ( rides[rider_id] )
+
+Riders Affected % =
+DIVIDE ( DISTINCTCOUNT ( safety_reports[rider_id] ), [Riders] )
+
+Avg Felt Safe = AVERAGE ( rides[felt_safe_score] )
+
+Avg Severity = AVERAGE ( safety_reports[severity] )
+
+Serious Incident % =
+DIVIDE (
+    CALCULATE ( [Total Reports], safety_reports[incident_type] IN { "physical", "following" } ),
+    [Total Reports]
+)
+
+Avg Wait (min) = AVERAGE ( rides[wait_minutes] )
+
+// --- priority page ---
+Launch Routes = CALCULATE ( COUNTROWS ( route_priority ), route_priority[priority_tier] = "1 Launch (top 10)" )
+
+Launch Share of Reports =
+DIVIDE (
+    CALCULATE ( [Total Reports], route_priority[priority_tier] = "1 Launch (top 10)" ),
+    CALCULATE ( [Total Reports], ALL ( route_priority ) )
+)
+
+Launch Share of Rides =
+DIVIDE (
+    CALCULATE ( [Total Rides], route_priority[priority_tier] = "1 Launch (top 10)" ),
+    CALCULATE ( [Total Rides], ALL ( route_priority ) )
+)
+
+// --- labels ---
+Data Note = "Ridership and safety reports are SYNTHETIC (see docs/synthetic_data.md). Network data: Transport for Cairo GTFS 2025."

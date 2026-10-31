@@ -1,0 +1,78 @@
+createOrReplace
+
+	table _Measures
+		measure 'Total Rides' = COUNTROWS ( rides )
+			formatString: #,0
+
+		measure 'Total Reports' = COUNTROWS ( safety_reports )
+			formatString: #,0
+
+		measure 'Reports per 1K Rides' = DIVIDE ( [Total Reports], [Total Rides] ) * 1000
+			formatString: 0.0
+
+		measure 'Riders' = DISTINCTCOUNT ( rides[rider_id] )
+			formatString: #,0
+
+		measure 'Riders Affected %' = DIVIDE ( DISTINCTCOUNT ( safety_reports[rider_id] ), [Riders] )
+			formatString: 0.0%
+
+		measure 'Avg Felt Safe' = AVERAGE ( rides[felt_safe_score] )
+			formatString: 0.00
+
+		measure 'Avg Severity' = AVERAGE ( safety_reports[severity] )
+			formatString: 0.00
+
+		measure 'Serious Incident %' = DIVIDE ( CALCULATE ( [Total Reports], safety_reports[incident_type] IN { "physical", "following" } ), [Total Reports] )
+			formatString: 0.0%
+
+		measure 'Avg Wait (min)' = AVERAGE ( rides[wait_minutes] )
+			formatString: 0.0
+
+		measure 'Launch Routes' = CALCULATE ( COUNTROWS ( route_priority ), route_priority[priority_tier] = "1 Launch (top 10)" )
+			formatString: 0
+
+		measure 'Launch Share of Reports' = DIVIDE ( CALCULATE ( [Total Reports], route_priority[priority_tier] = "1 Launch (top 10)" ), CALCULATE ( [Total Reports], ALL ( route_priority ) ) )
+			formatString: 0.0%
+
+		measure 'Launch Share of Rides' = DIVIDE ( CALCULATE ( [Total Rides], route_priority[priority_tier] = "1 Launch (top 10)" ), CALCULATE ( [Total Rides], ALL ( route_priority ) ) )
+			formatString: 0.0%
+
+		measure 'Data Note' = "Ridership and safety reports are SYNTHETIC (see docs/synthetic_data.md). Network: Transport for Cairo GTFS 2025."
+
+		column Value
+			dataType: string
+			isHidden
+			summarizeBy: none
+			isNameInferred
+			sourceColumn: [Value]
+
+		partition _Measures = calculated
+			mode: import
+			source = ROW ( "Value", "" )
+
+	table dim_period
+		column period
+			dataType: string
+			summarizeBy: none
+			isNameInferred
+			sourceColumn: [period]
+			sortByColumn: period_order
+
+		column period_order
+			dataType: int64
+			formatString: 0
+			summarizeBy: none
+			isNameInferred
+			sourceColumn: [period_order]
+
+		partition dim_period = calculated
+			mode: import
+			source = DATATABLE ( "period", STRING, "period_order", INTEGER, { { "AM peak", 1 }, { "Midday", 2 }, { "PM peak", 3 }, { "Evening", 4 } } )
+
+	relationship rides_dim_period
+		fromColumn: rides.period
+		toColumn: dim_period.period
+
+	relationship period_stage_dim_period
+		fromColumn: period_stage.period
+		toColumn: dim_period.period

@@ -1,0 +1,40 @@
+routes ranked: 426 (>= 200 rides), low confidence: 571
+
+TOP 10 routes for the women-only launch (cover 1.9% of all rides, 3.1% of all reports):
+ priority_rank                                   route_long_name agency_id  rides  reports_per_1k  avg_severity  priority_score
+             1              Al Omraneyya Al Gadida - Ibrahim Bek       CTA    343          78.717         2.593            86.1
+             2    7th District (Nasr City) - Tagneed (Al Remaya)       CTA    389          69.409         2.370            85.9
+             3   1st Settlement (New Cairo) - Abd Al Moneim Riad       CTA    399          47.619         2.684            84.7
+             4      8th District (Nasr City) - Al tabba - Moneeb       CTA    363          55.096         2.550            83.3
+             5                   Al Warraq - Tagneed (Al Remaya)     CTA_M    329          69.909         2.522            83.0
+             6                    Mazallat - Tagneed (Al Remaya)       CTA    326          70.552         2.478            82.1
+             7                   Masaken Sheraton - Saqr Quraish     CTA_M    377          58.355         2.409            81.8
+             8 7th District (Nasr City) - Al Magzar (Mariouteya)     CTA_M    398          47.739         2.632            80.4
+             9               1st Settlement (New Cairo) - Imbaba       CTA    366          43.716         2.750            79.1
+            10                     Abou Wafya - Masaken Sheraton       CTA    343          46.647         2.562            77.9
+
+reports per 1k rides by operator (routes with enough data):
+agency_name
+Cairo Transport Authority                                            42.9
+Minibus licensed by CTA                                              34.8
+Paratransit 14 Seater Microbus (Orange Licenseplates)                30.5
+Paratransit 8 Seater Suzuki Chevrolet or DMF (Blue Licenseplates)    30.3
+Cooperative paratransit 29 Seater (Grey Licenseplates)               27.5
+Minibus licensed by LTRA                                             26.5
+Mwasalat Misr                                                        23.1
+Green Bus                                                            21.2
+
+top 5 hotspot stops (by reports):
+                       stop_name  boardings  reports  reports_per_1k_boardings
+The Egyptian Lawyers Association        539       34                      63.1
+     Ahmed Saaed Bridge Entrance        376       26                      69.1
+               Ahmed Oraby Metro        490       25                      51.0
+ Al Salam Tunnel Exit (Ring Rd.)        582       24                      41.2
+                          Ramses        485       24                      49.5
+
+reports per 1k rides by period:
+period
+AM peak    39.8
+PM peak    37.3
+Evening    32.0
+Midday     26.6
